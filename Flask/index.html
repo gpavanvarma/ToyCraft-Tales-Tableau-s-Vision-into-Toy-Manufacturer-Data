@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Interactive dashboard analyzing toy manufacturers across the United States">
+  <title>ToyCraft Tales</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    /* Header Styles */
+    .header {
+      background-color:#118ab2;
+      background-size: cover;
+      background-position: center;
+      padding: 60px 0;
+      position: relative;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ff6b6b;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .logo-subtitle {
+      display: block;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.4;
+      color: #f8f9fa;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      margin-top: 5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #f8f9fa;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    .nav-links a:hover {
+      background-color: rgb(255, 0, 0);
+      transform: translateY(-2px);
+    }
+
+    /* Different colors for each nav item */
+    .nav-links a[href="#home"] { color: #ffffff; }
+    .nav-links a[href="#about"] { color: #ffffff; }
+    .nav-links a[href="#dashboard"] { color: #ffffff; }
+    .nav-links a[href="#story"] { color: #ffffff; }
+
+    /* Main Content Styles */
+    .container {
+      padding: 40px 20px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #2b2d42;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #ff6b6b, #118ab2, #06d6a0);
+      border-radius: 2px;
+    }
+
+    /* Content Sections */
+    .content-section {
+      display: none;
+      padding: 30px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .content-section h2 {
+      color: #2b2d42;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      border-left: 5px solid #ff6b6b;
+      padding-left: 15px;
+    }
+
+    /* Visualization Sections */
+    .visualization-container {
+      position: relative;
+      width: 100%;
+      height: 120vh; /* Increased height for better viewing */
+      margin: 30px 0;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border: 1px solid #e9ecef;
+    }
+
+    .visualization-title {
+      font-size: 1.6rem;
+      color: #2b2d42;
+      margin: 20px 0 10px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ff6b6b;
+    }
+
+    /* About Section */
+    .about-content {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .about-text {
+      flex: 1;
+    }
+
+    .about-image {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Footer */
+    .dashboard-footer {
+      margin-top: 50px;
+      padding: 30px;
+      background: #2b2d42;
+      color: #f8f9fa;
+      text-align: center;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: #adb5bd;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #ff6b6b;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+      
+      .title {
+        font-size: 2rem;
+      }
+      
+      .about-content {
+        flex-direction: column;
+      }
+
+      .visualization-container {
+        height: 100vh; /* Adjusted for mobile */
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo">
+        ToyCraft Tales
+        <span class="logo-subtitle">Tableau's Vision into Toy Manufacturer Data</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#dashboard" class="nav-link">Dashboard</a>
+        <a href="#story" class="nav-link">Story</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Home Section -->
+    <section id="home-content" class="content-section active">
+      <h1 class="title">Toy Manufacturer Analysis</h1>
+      
+      <!-- Dashboard Visualization in Home -->
+      <h3 class="visualization-title">Dashboard Overview</h3>
+      <div class="visualization-container">
+        <div class='tableauPlaceholder' id='viz1751032280504' style='position: relative'><noscript><a href='#'><img alt='ToyCraft Tales Tableau&#39;s Vision into Toy Manufacturer Data ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;To&#47;ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;To&#47;ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1751032280504');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1300px';vizElement.style.height='1727px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1300px';vizElement.style.height='1727px';} else { vizElement.style.width='100%';vizElement.style.height='1677px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+      </div>
+      
+      <!-- Story Visualization in Home -->
+      <h3 class="visualization-title">Manufacturing Story</h3>
+      <div class="visualization-container">
+        <div class='tableauPlaceholder' id='viz1751033646433' style='position: relative; width: 100%; height: 100%;'>
+          <noscript>
+            <a href='#'>
+              <img alt='ToyCraft Tales Tableau&#39;s Vision into Toy Manufacturer Data Story ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;GH&#47;GHHY5992W&#47;1_rss.png' style='border: none' />
+            </a>
+          </noscript>
+          <object class='tableauViz' style='display:none;width: 100%; height: 100%;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+            <param name='embed_code_version' value='3' />
+            <param name='path' value='shared&#47;GHHY5992W' />
+            <param name='toolbar' value='yes' />
+            <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;GH&#47;GHHY5992W&#47;1.png' />
+            <param name='animate_transition' value='yes' />
+            <param name='display_static_image' value='yes' />
+            <param name='display_spinner' value='yes' />
+            <param name='display_overlay' value='yes' />
+            <param name='display_count' value='yes' />
+            <param name='language' value='en-US' />
+            <param name='filter' value='publish=yes' />
+          </object>
+        </div>
+      </div>
+      
+      <div class="description">
+        <h2>📊 Project Highlights</h2>
+        <p>
+          Explore the fascinating world of toy manufacturing through our interactive dashboard and story. 
+          Discover trends, patterns, and insights that shape the industry.
+        </p>
+        <ul>
+          <li>✔️ Comprehensive analysis of manufacturers across all 50 states</li>
+          <li>✔️ Trend visualization from 2010 to present</li>
+          <li>✔️ Interactive filters for customized exploration</li>
+          <li>✔️ Export functionality for further analysis</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about-content" class="content-section">
+      <h2>About This Project</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>This project began as an exploration of the toy manufacturing industry in the United States. Our team of data analysts and visualization specialists worked tirelessly to create this comprehensive dashboard.</p>
+          
+          <h3>Project Goals</h3>
+          <ul>
+            <li>Provide transparent industry data to stakeholders</li>
+            <li>Identify regional manufacturing trends</li>
+            <li>Highlight growth opportunities in the sector</li>
+            <li>Create an engaging, user-friendly interface</li>
+          </ul>
+          
+          <h3>Data Sources</h3>
+          <p>We collected data from multiple reliable sources including:</p>
+          <ul>
+            <li>U.S. Toy Manufacturers Association annual reports</li>
+            <li>Department of Commerce manufacturing data</li>
+            <li>State-level business registration databases</li>
+          </ul>
+        </div>
+        <div class="about-image">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Toy manufacturing facility">
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard-content" class="content-section">
+      <h2>Interactive Dashboard</h2>
+      <div class="visualization-container">
+        <div class='tableauPlaceholder' id='viz1751032280504-dashboard' style='position: relative; width: 100%; height: 100%;'>
+          <noscript>
+            <a href='#'>
+              <img alt='ToyCraft Tales Tableau&#39;s Vision into Toy Manufacturer Data ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;To&#47;ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090&#47;Dashboard1&#47;1_rss.png' style='border: none' />
+            </a>
+          </noscript>
+          <object class='tableauViz' style='display:none;width: 100%; height: 100%;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+            <param name='embed_code_version' value='3' />
+            <param name='site_root' value='' />
+            <param name='name' value='ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090&#47;Dashboard1' />
+            <param name='tabs' value='no' />
+            <param name='toolbar' value='yes' />
+            <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;To&#47;ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090&#47;Dashboard1&#47;1.png' />
+            <param name='animate_transition' value='yes' />
+            <param name='display_static_image' value='yes' />
+            <param name='display_spinner' value='yes' />
+            <param name='display_overlay' value='yes' />
+            <param name='display_count' value='yes' />
+            <param name='language' value='en-US' />
+            <param name='filter' value='publish=yes' />
+          </object>
+        </div>
+      </div>
+      <div class="dashboard-notes">
+        <h3>How to Use This Dashboard</h3>
+        <p>Explore the data by clicking on different visual elements. Use the filters in the dashboard to customize your view. Hover over charts to see detailed tooltips.</p>
+      </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story-content" class="content-section">
+      <h2>The Story of Toy Manufacturing</h2>
+      <div class="visualization-container" style="height: 140vh;"> <!-- Increased height specifically for story -->
+        <div class='tableauPlaceholder' id='viz1751033646433-story' style='position: relative; width: 100%; height: 100%;'>
+          <noscript>
+            <a href='#'>
+              <img alt='ToyCraft Tales Tableau&#39;s Vision into Toy Manufacturer Data Story ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;GH&#47;GHHY5992W&#47;1_rss.png' style='border: none' />
+            </a>
+          </noscript>
+          <object class='tableauViz' style='display:none;width: 100%; height: 100%;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+            <param name='embed_code_version' value='3' />
+            <param name='path' value='shared&#47;GHHY5992W' />
+            <param name='toolbar' value='yes' />
+            <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;GH&#47;GHHY5992W&#47;1.png' />
+            <param name='animate_transition' value='yes' />
+            <param name='display_static_image' value='yes' />
+            <param name='display_spinner' value='yes' />
+            <param name='display_overlay' value='yes' />
+            <param name='display_count' value='yes' />
+            <param name='language' value='en-US' />
+            <param name='filter' value='publish=yes' />
+          </object>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <p>Data last updated: <span id="update-date">June 2023</span></p>
+      <p>© 2023 ToyCraft Tales. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="mailto:contact@toycrafttales.com">Contact Us</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Navigation functionality
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Hide all content sections
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        // Show the selected content section
+        const target = this.getAttribute('href').replace('#', '');
+        document.getElementById(`${target}-content`).classList.add('active');
+        
+        // Initialize visualizations when switching sections
+        initializeTableau();
+      });
+    });
+
+    // Default to home if no hash in URL
+    if (!window.location.hash) {
+      window.location.hash = '#home';
+    } else {
+      // Show the section based on URL hash
+      const target = window.location.hash.replace('#', '');
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(`${target}-content`).classList.add('active');
+    }
+
+    // Initialize Tableau visualizations
+    function initializeTableau() {
+      // Dashboard visualization - Home
+      const dashboardDivHome = document.getElementById('viz1751032280504');
+      if (dashboardDivHome) {
+        const dashboardVizHome = dashboardDivHome.getElementsByTagName('object')[0];
+        dashboardVizHome.style.width = '100%';
+        dashboardVizHome.style.height = '100%';
+        const dashboardScriptHome = document.createElement('script');
+        dashboardScriptHome.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        dashboardVizHome.parentNode.insertBefore(dashboardScriptHome, dashboardVizHome);
+      }
+
+      // Story visualization - Home
+      const storyDivHome = document.getElementById('viz1751033646433');
+      if (storyDivHome) {
+        const storyVizHome = storyDivHome.getElementsByTagName('object')[0];
+        storyVizHome.style.width = '100%';
+        storyVizHome.style.height = '100%';
+        const storyScriptHome = document.createElement('script');
+        storyScriptHome.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        storyVizHome.parentNode.insertBefore(storyScriptHome, storyVizHome);
+      }
+
+      // Dashboard visualization - Dashboard Page
+      const dashboardDiv = document.getElementById('viz1751032280504-dashboard');
+      if (dashboardDiv) {
+        const dashboardViz = dashboardDiv.getElementsByTagName('object')[0];
+        dashboardViz.style.width = '100%';
+        dashboardViz.style.height = '100%';
+        const dashboardScript = document.createElement('script');
+        dashboardScript.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        dashboardViz.parentNode.insertBefore(dashboardScript, dashboardViz);
+      }
+
+      // Story visualization - Story Page
+      const storyDiv = document.getElementById('viz1751033646433-story');
+      if (storyDiv) {
+        const storyViz = storyDiv.getElementsByTagName('object')[0];
+        storyViz.style.width = '100%';
+        storyViz.style.height = '100%';
+        const storyScript = document.createElement('script');
+        storyScript.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        storyViz.parentNode.insertBefore(storyScript, storyViz);
+      }
+    }
+
+    // Update date automatically
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December'];
+    const currentDate = new Date();
+    document.getElementById('update-date').textContent = 
+      `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+
+    // Initialize Tableau when page loads
+    window.addEventListener('load', initializeTableau);
+  </script>
+</body>
+</html>
