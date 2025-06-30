@@ -1,0 +1,10 @@
+Dashboard->Public Link:
+-----------------------
+https://public.tableau.com/views/ToyCraftTalesTableausVisionintoToyManufacturerData_17510215747090/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+Story->Public Link:
+-------------------
+https://public.tableau.com/shared/GHHY5992W?:display_count=n&:origin=viz_share_link
