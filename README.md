@@ -29,7 +29,7 @@ The dataset includes the following columns:
 - Monthly/Yearly Production Volume  
 - Sales & Revenue Figures  
 
-> *(Replace this with actual dataset link or attach a sample CSV in the repo)*
+
 
 ---
 
@@ -37,7 +37,7 @@ The dataset includes the following columns:
 
 - **Tableau Public / Tableau Desktop**  
 - **MS Excel / Google Sheets** – Data cleaning  
-- *(Optional)* **Canva / Figma** – Asset design for documentation  
+
 
 ---
 
